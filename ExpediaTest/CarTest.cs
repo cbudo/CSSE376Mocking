@@ -69,5 +69,26 @@ namespace ExpediaTest
             Assert.AreEqual(anotherCarLocation, result);
             mocks.VerifyAll();
         }
+        [TestMethod()]
+        public void TestThatCarGetsMileageProperly()
+        {
+            IDatabase mockDatabase = mocks.StrictMock<IDatabase>();
+            Int32 Miles = 150;
+            Expect.Call(mockDatabase.Miles).PropertyBehavior();
+            mocks.ReplayAll();
+            mockDatabase.Miles = Miles;
+            var target = new Car(15);
+            target.Database = mockDatabase;
+            int resultMiles = target.Mileage;
+            Assert.AreEqual(resultMiles, Miles);
+            mocks.VerifyAll();
+        }
+        [TestMethod()]
+        public void TestObjectMotherBMW()
+        {
+            Car BMW = ObjectMother.BMW();
+            Assert.AreEqual(100*0.8, BMW.getBasePrice());
+            Assert.AreEqual("BMW i3", BMW.Name);
+        }
 	}
 }
