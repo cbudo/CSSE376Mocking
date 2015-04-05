@@ -2,6 +2,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Expedia;
 using Rhino.Mocks;
+using System.Collections.Generic;
 
 namespace ExpediaTest
 {
@@ -50,5 +51,23 @@ namespace ExpediaTest
 		{
 			new Car(-5);
 		}
+        [TestMethod()]
+        public void TestThatCarGetsCorrectLocationFromDatabase()
+        {
+            IDatabase mockDatabase = mocks.StrictMock<IDatabase>();
+            String carLocation = "Rose Hulman";
+            String anotherCarLocation = "ISU";
+            Expect.Call(mockDatabase.getCarLocation(3)).Return(carLocation);
+            Expect.Call(mockDatabase.getCarLocation(6)).Return(anotherCarLocation);
+            mocks.ReplayAll();
+            Car target = new Car(15);
+            target.Database = mockDatabase;
+            string result;
+            result = target.getCarLocation(3);
+            Assert.AreEqual(carLocation, result);
+            result = target.getCarLocation(6);
+            Assert.AreEqual(anotherCarLocation, result);
+            mocks.VerifyAll();
+        }
 	}
 }
